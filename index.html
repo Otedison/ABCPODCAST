@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC Podcast | Elevating Conversations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+    <style>
+        /* ====== BASE STYLES ====== */
+        :root {
+            --primary: #5E35B1;
+            --primary-light: #7E57C2;
+            --secondary: #FF7043;
+            --dark: #1A237E;
+            --light: #F5F5F5;
+            --lighter: #FFFFFF;
+            --gray: #E0E0E0;
+            --dark-gray: #424242;
+            --darker: #0D1117;
+            
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+            --shadow-lg: 0 15px 35px rgba(0,0,0,0.15);
+            
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #212121;
+            background-color: var(--lighter);
+            line-height: 1.6;
+            padding-bottom: 80px; /* Space for floating player */
+        }
+
+        /* ====== NAVIGATION ====== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 2rem;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.75rem 1.25rem 0.75rem 3rem;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--gray);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--light);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(94, 53, 177, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--dark-gray);
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--dark-gray);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-circle {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            border: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark-gray);
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            z-index: 999;
+            transform: translateY(-150%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+        }
+
+        /* ====== HERO SECTION WITH SLIDER ====== */
+        .hero-slider {
+            height: 100vh;
+            margin-top: -80px;
+            position: relative;
+        }
+
+        .swiper {
+            width: 100%;
+            height: 100%;
+        }
+
+        .swiper-slide {
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .swiper-slide::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .swiper-pagination-bullet {
+            width: 12px;
+            height: 12px;
+            background: white;
+            opacity: 0.6;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: var(--primary);
+            opacity: 1;
+        }
+
+        .swiper-button-next, 
+        .swiper-button-prev {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            backdrop-filter: blur(5px);
+        }
+
+        .swiper-button-next::after, 
+        .swiper-button-prev::after {
+            font-size: 1.25rem;
+        }
+
+        /* ====== PROMO BOX ====== */
+        .promo-box {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            margin: 4rem auto;
+            max-width: 1200px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .promo-box::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+        }
+
+        .promo-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .promo-text {
+            flex: 2;
+        }
+
+        .promo-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .promo-description {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .promo-button {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-promo {
+            background-color: white;
+            color: var(--primary);
+            font-weight: 700;
+            padding: 1rem 2rem;
+        }
+
+        .btn-promo:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ====== PARTNERS SECTION ====== */
+        .partners {
+            padding: 4rem 5%;
+            background-color: var(--light);
+        }
+
+        .partners-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .partners-title {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .partner-logos {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .partner-logo {
+            max-width: 150px;
+            height: auto;
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+
+        .partner-logo:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+
+        /* ====== EPISODES SECTION ====== */
+        .episodes {
+            padding: 6rem 5%;
+            background-color: var(--lighter);
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: var(--radius-full);
+        }
+
+        .view-all {
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .episode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .episode-card {
+            background-color: var(--lighter);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .episode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .episode-image {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .episode-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .episode-card:hover .episode-image img {
+            transform: scale(1.05);
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .play-btn i {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-left: 4px;
+        }
+
+        .episode-card:hover .play-btn {
+            opacity: 1;
+        }
+
+        .episode-content {
+            padding: 1.5rem;
+        }
+
+        .episode-number {
+            display: inline-block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            background-color: rgba(94, 53, 177, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-full);
+        }
+
+        .episode-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .episode-desc {
+            color: var(--dark-gray);
+            margin-bottom: 1.5rem;
+            font-size: 0.9375rem;
+        }
+
+        .episode-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--dark-gray);
+            font-size: 0.875rem;
+        }
+
+        /* ====== FLOATING AUDIO PLAYER ====== */
+        .floating-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            padding: 1rem;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .floating-player.active {
+            transform: translateY(0);
+        }
+
+        .player-cover {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-info h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .player-info p {
+            color: var(--dark-gray);
+            font-size: 0.875rem;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .player-btn {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--primary);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .player-btn:hover {
+            background-color: rgba(94, 53, 177, 0.1);
+        }
+
+        .player-progress {
+            flex: 2;
+            max-width: 400px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background-color: var(--gray);
+            border-radius: 2px;
+            margin-bottom: 0.25rem;
+            overflow: hidden;
+        }
+
+        .progress-filled {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            width: 0%;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--dark-gray);
+        }
+
+        .player-close {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            color: var(--dark-gray);
+            cursor: pointer;
+            margin-left: 1rem;
+        }
+
+        /* ====== FOOTER ====== */
+        .footer {
+            background-color: var(--darker);
+            color: white;
+            padding: 6rem 5% 3rem;
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-about {
+            max-width: 300px;
+        }
+
+        .footer-about p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+            font-size: 0.9375rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9375rem;
+            transition: var(--transition);
+        }
+
+        .footer-link:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .footer-newsletter p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1.5rem;
+            font-size: 0.9375rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            border: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .newsletter-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-newsletter {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: var(--radius-md);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .copyright {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+        }
+
+        /* ====== RESPONSIVE DESIGN ====== */
+        @media (max-width: 1024px) {
+            .hero-content {
+                text-align: center;
+                margin: 0 auto;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .search-bar {
+                margin: 0 1rem;
+                max-width: 300px;
+            }
+
+            .promo-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .promo-button {
+                justify-content: center;
+            }
+
+            .floating-player {
+                flex-wrap: wrap;
+                padding: 1rem;
+            }
+
+            .player-progress {
+                flex: 1 1 100%;
+                order: 3;
+                margin-top: 0.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 5%;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .search-bar {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .episode-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .promo-box {
+                padding: 2rem;
+                margin: 2rem auto;
+            }
+
+            .promo-title {
+                font-size: 1.5rem;
+            }
+
+            .partner-logos {
+                gap: 1.5rem;
+            }
+
+            .partner-logo {
+                max-width: 120px;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 1rem 5%;
+            }
+            
+            .search-bar input {
+                padding-left: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .promo-box {
+                padding: 1.5rem;
+                border-radius: var(--radius-lg);
+            }
+
+            .partner-logos {
+                gap: 1rem;
+            }
+
+            .partner-logo {
+                max-width: 100px;
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .btn-newsletter {
+                padding: 0.75rem 1rem;
+            }
+
+            .floating-player {
+                gap: 0.75rem;
+                padding: 0.75rem;
+            }
+
+            .player-cover {
+                width: 40px;
+                height: 40px;
+            }
+
+            .player-controls {
+                gap: 0.5rem;
+            }
+
+            .player-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="#" class="logo">
+                <span class="logo-circle"></span>
+                ABC
+            </a>
+            <a href="index.html" class="nav-link active">
+                <i class="fas fa-home"></i>
+                Home
+            </a>
+            <a href="Episodes.html" class="nav-link">
+                <i class="fas fa-headphones"></i>
+                Episodes
+            </a>
+            <a href="Guest.html" class="nav-link">
+                <i class="fas fa-users"></i>
+                Guests
+            </a>
+            <a href="About.html" class="nav-link">
+                <i class="fas fa-info-circle"></i>
+                About
+            </a>
+        </div>
+        
+        <div class="search-bar">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" placeholder="Search episodes...">
+        </div>
+        
+        <button class="btn btn-primary">
+            Subscribe
+        </button>
+        
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#" class="nav-link active">
+            <i class="fas fa-home"></i>
+            Home
+        </a>
+        <a href="#" class="nav-link">
+            <i class="fas fa-headphones"></i>
+            Episodes
+        </a>
+        <a href="#" class="nav-link">
+            <i class="fas fa-users"></i>
+            Guests
+        </a>
+        <a href="#" class="nav-link">
+            <i class="fas fa-info-circle"></i>
+            About
+        </a>
+        <div class="search-bar">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" placeholder="Search episodes...">
+        </div>
+        <button class="btn btn-primary" style="width: 100%;">
+            Subscribe
+        </button>
+    </div>
+
+    <!-- Hero Slider -->
+    <div class="hero-slider">
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1593697909683-bccb1b9e68a4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Discover Thought-Provoking Conversations</h1>
+                        <p class="hero-subtitle">
+                            ABC Podcast brings you insightful discussions with industry leaders, 
+                            innovators, and storytellers from around the world.
+                        </p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-play"></i>
+                                Latest Episode
+                            </button>
+                            <button class="btn btn-secondary">
+                                Browse All
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1478737270239-2f02b77fc618?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Premium Audio Experience</h1>
+                        <p class="hero-subtitle">
+                            Crystal clear sound quality with our professional recording setup 
+                            and expert post-production.
+                        </p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-headphones"></i>
+                                Listen Now
+                            </button>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-star"></i>
+                                Subscribe
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-slide" style="background-image: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a5d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Join Our Community</h1>
+                        <p class="hero-subtitle">
+                            Connect with like-minded listeners and participate in exclusive 
+                            Q&A sessions with our guests.
+                        </p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-users"></i>
+                                Join Now
+                            </button>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-calendar"></i>
+                                Events
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+
+    <!-- Promo Box -->
+    <div class="promo-box">
+        <div class="promo-content">
+            <div class="promo-text">
+                <h2 class="promo-title">Special Limited-Time Offer</h2>
+                <p class="promo-description">
+                    Subscribe to our premium membership and get exclusive access to bonus content, 
+                    ad-free episodes, and early releases. First month free for new subscribers!
+                </p>
+            </div>
+            <div class="promo-button">
+                <button class="btn btn-promo">
+                    Get Premium Access
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Partners Section -->
+    <section class="partners">
+        <div class="partners-container">
+            <h3 class="partners-title">Trusted By Industry Leaders</h3>
+            <div class="partner-logos">
+                <img src="https://via.placeholder.com/150x60?text=TECH+" alt="Tech Plus" class="partner-logo">
+                <img src="https://via.placeholder.com/150x60?text=INNOVATE" alt="Innovate Co" class="partner-logo">
+                <img src="https://via.placeholder.com/150x60?text=SOUNDWAVE" alt="SoundWave" class="partner-logo">
+                <img src="https://via.placeholder.com/150x60?text=MEDIA+" alt="Media Plus" class="partner-logo">
+                <img src="https://via.placeholder.com/150x60?text=CREATIVE" alt="Creative Labs" class="partner-logo">
+            </div>
+        </div>
+    </section>
+
+    <!-- Episodes Section -->
+    <section class="episodes">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">Latest Episodes</h2>
+                <a href="#" class="view-all">
+                    View All
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="episode-grid">
+                <!-- Episode 1 -->
+                <div class="episode-card">
+                    <div class="episode-image">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="AI Technology">
+                        <div class="play-btn">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="episode-content">
+                        <span class="episode-number">Episode 42</span>
+                        <h3 class="episode-title">The Future of AI in Creative Industries</h3>
+                        <p class="episode-desc">
+                            Exploring how artificial intelligence is transforming art, music, and content creation.
+                        </p>
+                        <div class="episode-meta">
+                            <span>1:25:18</span>
+                            <span>June 12, 2023</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Episode 2 -->
+                <div class="episode-card">
+                    <div class="episode-image">
+                        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Business Meeting">
+                        <div class="play-btn">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="episode-content">
+                        <span class="episode-number">Episode 41</span>
+                        <h3 class="episode-title">Sustainable Business Models</h3>
+                        <p class="episode-desc">
+                            How modern companies are balancing profitability with environmental responsibility.
+                        </p>
+                        <div class="episode-meta">
+                            <span>1:08:42</span>
+                            <span>June 5, 2023</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Episode 3 -->
+                <div class="episode-card">
+                    <div class="episode-image">
+                        <img src="https://images.unsplash.com/photo-1494172961521-33799ddd43a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Creative Mind">
+                        <div class="play-btn">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="episode-content">
+                        <span class="episode-number">Episode 40</span>
+                        <h3 class="episode-title">The Psychology of Innovation</h3>
+                        <p class="episode-desc">
+                            Understanding what drives creative thinking and breakthrough ideas.
+                        </p>
+                        <div class="episode-meta">
+                            <span>1:12:35</span>
+                            <span>May 29, 2023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <a href="#" class="footer-logo">
+                    <span class="logo-circle"></span>
+                    ABC Podcast
+                </a>
+                <div class="footer-about">
+                    <p>Bringing you thought-provoking conversations with the world's most interesting people since 2018.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-spotify"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-apple"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h4 class="footer-title">Quick Links</h4>
+                <div class="footer-links">
+                    <a href="index.html" class="footer-link">Home</a>
+                    <a href="Episodes.html" class="footer-link">Episodes</a>
+                    <a href="Guest.html" class="footer-link">Guests</a>
+                    <a href="About.html" class="footer-link">About</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h4 class="footer-title">Categories</h4>
+                <div class="footer-links">
+                    <a href="#" class="footer-link">Technology</a>
+                    <a href="#" class="footer-link">Business</a>
+                    <a href="#" class="footer-link">Science</a>
+                    <a href="#" class="footer-link">Arts</a>
+                    <a href="#" class="footer-link">Health</a>
+                </div>
+            </div>
+            
+            <div class="footer-col">
+                <h4 class="footer-title">Newsletter</h4>
+                <div class="footer-newsletter">
+                    <p>Subscribe to get notified about new episodes and exclusive content.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email" class="newsletter-input">
+                        <button type="submit" class="btn-newsletter">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p class="copyright">&copy; 2023 ABC Podcast. All rights reserved. | <a href="#" style="color: rgba(255,255,255,0.7);">Privacy Policy</a> | <a href="#" style="color: rgba(255,255,255,0.7);">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <!-- Floating Audio Player -->
+    <div class="floating-player" id="floatingPlayer">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="Now Playing" class="player-cover">
+        <div class="player-info">
+            <h4>The Future of AI in Creative Industries</h4>
+            <p>Episode 42 • ABC Podcast</p>
+        </div>
+        <div class="player-controls">
+            <button class="player-btn" id="prevBtn"><i class="fas fa-step-backward"></i></button>
+            <button class="player-btn" id="playBtn"><i class="fas fa-play"></i></button>
+            <button class="player-btn" id="nextBtn"><i class="fas fa-step-forward"></i></button>
+        </div>
+        <div class="player-progress">
+            <div class="progress-bar">
+                <div class="progress-filled" id="progressBar"></div>
+            </div>
+            <div class="time-info">
+                <span id="currentTime">0:00</span>
+                <span id="duration">1:25:18</span>
+            </div>
+        </div>
+        <button class="player-close" id="closePlayer"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script>
+        // Initialize Swiper
+        const swiper = new Swiper('.swiper', {
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            mobileMenuBtn.innerHTML = mobileMenu.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+
+        // Floating Player Functionality
+        const floatingPlayer = document.getElementById('floatingPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const progressBar = document.getElementById('progressBar');
+        const currentTimeEl = document.getElementById('currentTime');
+        const closePlayer = document.getElementById('closePlayer');
+        
+        // Show player when page loads
+        setTimeout(() => {
+            floatingPlayer.classList.add('active');
+        }, 2000);
+        
+        // Play/Pause functionality
+        let isPlaying = false;
+        playBtn.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            playBtn.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+        });
+        
+        // Update progress bar (simulated)
+        function updateProgress() {
+            if (isPlaying) {
+                const duration = 85 * 60; // 85 minutes in seconds
+                let currentTime = parseFloat(currentTimeEl.textContent.split(':').reduce((acc, time) => (60 * acc) + +time));
+                
+                if (currentTime < duration) {
+                    currentTime += 1;
+                    const minutes = Math.floor(currentTime / 60);
+                    const seconds = Math.floor(currentTime % 60);
+                    currentTimeEl.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+                    progressBar.style.width = `${(currentTime / duration) * 100}%`;
+                } else {
+                    isPlaying = false;
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                }
+            }
+        }
+        
+        setInterval(updateProgress, 1000);
+        
+        // Close player
+        closePlayer.addEventListener('click', () => {
+            floatingPlayer.classList.remove('active');
+        });
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.boxShadow = '0 1px 3px rgba(0,0,0,0.08)';
+            }
+        });
+    </script>
+</body>
+</html>
